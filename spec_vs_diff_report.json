@@ -1,0 +1,207 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-03-01T06:29:53.097Z",
+  "summary": "The diff implements a substantial portion of the Sparkling platform including splash screen, login, registration flows, dashboards, discovery, marketplace, notifications, ratings, banners, government contracts, and design system. However, several backend requirements are purely frontend/mock implementations with no real backend persistence, and certain specific acceptance criteria are not fully satisfied.",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Backend validates credentials and returns a role-scoped session token; Login button routes to the correct role-specific dashboard based on backend validation",
+      "reason": "The backend main.mo has no login/authentication logic, no credential validation, and no session token issuance. The login page appears to be frontend-only with no backend credential check.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Registered user data is persisted in the backend with correct role assignment; location stored in backend",
+      "reason": "While backend/main.mo has a saveCallerUserProfile function with location field, the Register page file was omitted from the diff and there is no evidence the registration form calls the backend to persist data.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Document uploads stored securely; submitted electrician profile saved with status pending_verification in backend; electrician does not appear in customer search results while pending",
+      "reason": "The backend has no electrician-specific data model, no pending_verification status field, no document storage for electrician documents, and no filtering logic to exclude unverified electricians.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Overview metric cards display real data from backend; Electrician verification queue with approve/reject that changes status in backend; Revenue tracker shows real commission data; Notification broadcaster sends in-app notifications by role/location",
+      "reason": "The backend has no metrics, no revenue tracking, no commission records, and no electrician verification status management beyond basic approval state.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Payment panel shows per-electrician earnings and commission breakdown from backend; Performance metrics from backend",
+      "reason": "Backend has no earnings, commission, or performance metrics data structures.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Discovery page shows only verified electricians enforced by backend; electricians grouped and sorted by proximity to selected location",
+      "reason": "Backend has no electrician listings, no verification status filtering, and no location/proximity sorting logic. The constraint that unverified electricians must never appear cannot be enforced without backend support.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Average rating computed and stored per electrician in backend; electricians below 2.0 rating flagged in admin dashboard via backend; discovery results sorted by rating from backend",
+      "reason": "Backend has no rating storage, no average computation, and no flagging mechanism for low-rated electricians.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Backend stores electrician-to-category mappings; service categories defined in backend",
+      "reason": "Backend main.mo has no service category definitions or electrician-to-category mapping structures.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/ServiceCategories.tsx"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Products persisted in backend; Super Admin can create, edit, and delete products via backend",
+      "reason": "Backend has no product catalog and no product CRUD operations. Cart is frontend-only via CartContext.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/contexts/CartContext.tsx"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "Contract listings, applications, and status tracking persisted in backend; admin can award/reject applications via backend",
+      "reason": "Backend has no government contract data model and no application tracking structures.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "requirement": "Banners uploaded and managed by Super Admin via backend; only active banners matching user location shown enforced by backend; location targeting stored in backend",
+      "reason": "Backend has no banner storage. BannerCarousel uses hardcoded DEMO_BANNERS with no backend integration and no location-targeted filtering from backend.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/BannerCarousel.tsx"
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "requirement": "Backend persists notifications per user and returns unread count",
+      "reason": "NotificationContext uses frontend-only demo data with no backend persistence. Backend has no notification storage or per-user notification retrieval.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/contexts/NotificationContext.tsx"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "requirement": "Each completed booking creates a transaction record in backend with amount, commission, and net payout; commission rate configurable by Super Admin in backend; contractor bulk commission rate of 8% tracked separately",
+      "reason": "Backend has no transaction records, no commission configuration, and no booking completion flow. EarningsPanel uses hardcoded DEMO_TRANSACTIONS.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/EarningsPanel.tsx"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Availability toggle updates electrician online status in backend; jobs section lists real bookings from backend; earnings from backend",
+      "reason": "Backend has no online status field, no booking records, and no earnings data structures.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "requirement": "All views are responsive and usable on mobile screen widths including dashboard sidebar navigation",
+      "reason": "Sidebar component is hidden on small screens with hidden lg:flex and no mobile drawer alternative is visible in the diff, which may fail mobile responsiveness for dashboard navigation.",
+      "evidence": [
+        "frontend/src/components/Sidebar.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Internet Identity authentication integration with AuthClient, DelegationIdentity, and actor-based backend calls",
+      "reason": "The build request specifies a role-based login with email/password credentials and demo pre-filled fields. The implementation uses Internet Computer Internet Identity protocol which was not requested and conflicts with the email/password login requirement.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts",
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/main.tsx"
+      ]
+    },
+    {
+      "description": "Secret admin token initialization via URL parameter caffeineAdminToken",
+      "reason": "No such secret token mechanism was requested in the build spec. This is an implementation-specific scaffolding feature not part of the requirements.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts"
+      ]
+    },
+    {
+      "description": "MixinAuthorization and MixinStorage actor mixins with blob storage in backend",
+      "reason": "The build request does not specify these mixin patterns or a generic blob storage mixin architecture. Backend requirements concern user profiles, electrician data, bookings, and transactions.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Generic UserApproval module for any Principal separate from electrician verification",
+      "reason": "The build request specifies electrician-specific verification with pending_verification/verified/rejected statuses tied to electrician profiles. A generic approval module for any Principal was not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/BannerCarousel.tsx",
+    "frontend/src/components/ContractApplicationModal.tsx",
+    "frontend/src/components/EarningsPanel.tsx",
+    "frontend/src/components/Header.tsx",
+    "frontend/src/components/NotificationBell.tsx",
+    "frontend/src/components/NotificationsPanel.tsx",
+    "frontend/src/components/PaymentSummary.tsx",
+    "frontend/src/components/RatingModal.tsx",
+    "frontend/src/components/ServiceCategories.tsx",
+    "frontend/src/components/Sidebar.tsx",
+    "frontend/src/components/SplashScreen.tsx",
+    "frontend/src/contexts/CartContext.tsx",
+    "frontend/src/contexts/NotificationContext.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/BookingPage.tsx",
+    "frontend/src/pages/Cart.tsx",
+    "frontend/src/pages/CustomerHome.tsx",
+    "frontend/src/pages/ElectricianAdminDashboard.tsx",
+    "frontend/src/pages/ElectricianDashboard.tsx",
+    "frontend/src/pages/ElectricianDiscovery.tsx",
+    "frontend/src/pages/ElectricianRegister.tsx",
+    "frontend/src/pages/GovernmentContracts.tsx",
+    "frontend/src/pages/Login.tsx",
+    "frontend/src/pages/Marketplace.tsx",
+    "frontend/src/pages/Register.tsx",
+    "frontend/src/pages/SuperAdminDashboard.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

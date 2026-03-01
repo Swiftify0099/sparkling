@@ -1,0 +1,413 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Sparkling — Electrician Marketplace Platform (Frontend Implementation)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Create full-screen animated splash screen with logo, electric arc animation, and auto-navigation to login",
+      "acceptanceCriteria": [
+        "Splash screen renders on initial app load as a full-viewport overlay",
+        "Logo and tagline are centered on a dark background with electric yellow accents",
+        "Fade-in and scale animation plays on load",
+        "Screen auto-redirects to login page after 2.5 seconds",
+        "Animation is smooth and does not cause layout shift"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SplashScreen.tsx",
+          "operation": "create",
+          "description": "Create a full-screen splash screen component displaying the Sparkling logo (using frontend/public/assets/generated/sparkling-logo.dim_256x256.png), tagline 'Power Your World', fade-in + scale animation, electric arc effect, and programmatic navigation to /login after 2.5 seconds. Use the generated background image frontend/public/assets/generated/splash-bg.dim_1920x1080.png. Apply dark charcoal (#1A1A2E) and electric yellow (#F5C518) theme colors. Component should be self-contained with CSS animations defined inline or in a scoped module."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire SplashScreen as the initial route or entry overlay. Ensure it displays before any authentication check and before routing to login. After 2.5 seconds, programmatically navigate to /login route using React Router."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Implement role-based login page with role selector dropdown and pre-filled default demo credentials",
+      "acceptanceCriteria": [
+        "Login page shows a role selector with all 5 roles",
+        "Selecting a role auto-fills the email and password fields with default credentials",
+        "Default credentials are visible (not masked by default) so users can review them",
+        "Login button routes to the correct role-specific dashboard",
+        "Invalid credentials show a clear error message"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Login.tsx",
+          "operation": "create",
+          "description": "Create a login page with a dropdown listing five roles: Super Admin, Electrician Admin, Electrician, Customer, Contractor. When a role is selected, auto-fill email and password fields with the corresponding default credentials (Super Admin: admin@sparkling.com/Admin@123; Electrician Admin: eladmin@sparkling.com/ElecAdmin@123; Electrician: electrician@sparkling.com/Elec@123; Customer: customer@sparkling.com/Customer@123; Contractor: contractor@sparkling.com/Contract@123). Display credentials in visible text fields. On login, call saveCallerUserProfile with role metadata and navigate to the role-specific dashboard route. Use authorization component's Internet Identity integration for authentication. Display error messages for invalid credentials. Apply theme colors #1A1A2E and #F5C518."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /login route pointing to the Login component. Ensure unauthenticated users are redirected here after the splash screen."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement user registration flow for Customer and Contractor roles with mandatory location selection",
+      "acceptanceCriteria": [
+        "Registration form includes all required fields: name, phone, email, password, location",
+        "Location field is a dropdown with at least 5 predefined areas",
+        "Form submission is blocked if location is not selected",
+        "Successful registration redirects to the appropriate dashboard"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Register.tsx",
+          "operation": "create",
+          "description": "Create a registration page for Customer and Contractor roles. Include form fields for full name, phone, email, password, and a mandatory location dropdown. Populate location dropdown with at least 5 predefined areas: North District, South District, East Zone, West Zone, Central City. Block form submission if location is not selected. On successful registration, call saveCallerUserProfile with the user's profile data including role, location, name, phone, and email. After registration, navigate to the appropriate role-specific dashboard. Use authorization component's Internet Identity integration and verify the component's usage instructions. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /register route pointing to the Register component. Add navigation links from the Login page to the Register page."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Implement electrician registration with multi-step form and document uploads",
+      "acceptanceCriteria": [
+        "Multi-step registration form with 3 distinct steps renders correctly",
+        "Document upload fields accept image and PDF files",
+        "Electrician receives a confirmation message after submission"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ElectricianRegister.tsx",
+          "operation": "create",
+          "description": "Create a multi-step registration form for electricians with 3 steps: Step 1 — personal details (name, phone, email, password, location); Step 2 — professional details (years of experience, service categories offered using checkboxes); Step 3 — document uploads (Aadhar card, PAN card, trade certificates, profile photo). Use the blob-storage component to upload documents as ExternalBlob instances. Verify the blob-storage component's usage instructions before implementing. Include progress indicator (step 1/3, 2/3, 3/3). On submission, call saveCallerUserProfile with role set to 'Electrician' and status 'pending_verification'. Display a confirmation message. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /electrician-register route pointing to the ElectricianRegister component. Add navigation from the Login page to this route for electrician registrations."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Build Super Admin dashboard with overview metrics, user management, electrician verification queue, revenue tracker, dispute resolution, banner management, and notification broadcaster",
+      "acceptanceCriteria": [
+        "Dashboard is only accessible when logged in as Super Admin role",
+        "Overview metric cards display real data from backend",
+        "Electrician verification queue shows document previews and approve/reject actions",
+        "Approving an electrician changes their status to 'verified' and makes them visible in search",
+        "Rejecting requires a reason and notifies the electrician",
+        "Revenue tracker shows commission breakdown per transaction",
+        "Banner management allows image upload with location targeting"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/SuperAdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create the Super Admin dashboard with left sidebar navigation and multiple sections: Overview metrics (total users, active electricians, pending verifications, revenue today), User management table (list all users with role filters, search, deactivate/activate actions using listApprovals and setApproval), Electrician verification queue (list pending electricians with document previews using blob-storage, Approve/Reject buttons calling setApproval, rejection reason input), Revenue & commission tracker, Dispute resolution panel, Promotional banners management (upload using blob-storage component, set active/inactive, assign to location), Notification broadcaster. Use authorization component to guard access (only Super Admin role). Verify both authorization and blob-storage component usage instructions. Apply theme styling with sidebar and card-based layout."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /super-admin route pointing to SuperAdminDashboard. Add route guard ensuring only users with admin role can access this route using the authorization component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Build Electrician Admin dashboard with managed electricians list, verification actions, payment management, and performance metrics",
+      "acceptanceCriteria": [
+        "Dashboard only accessible for Electrician Admin role",
+        "Lists all electricians under this admin's jurisdiction with filters by status and location",
+        "Document verification panel with approve/reject actions",
+        "Payment panel shows per-electrician earnings and commission breakdown"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ElectricianAdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create the Electrician Admin dashboard with left sidebar and sections: Managed electricians list (with verification status, location, ratings, filters by status and location), Pending verification actions (approve/reject with document review using blob-storage for viewing documents), Payment management (view earnings per electrician, commission deducted, payout status), Performance metrics (jobs completed, ratings average, dispute count per electrician). Guard access to this dashboard for Electrician Admin role using the authorization component. Verify authorization and blob-storage component usage instructions. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /electrician-admin route pointing to ElectricianAdminDashboard. Add route guard ensuring only Electrician Admin role can access."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Build customer-facing Electrician Discovery page with location filter, service category filter, radius selector, and electrician result cards",
+      "acceptanceCriteria": [
+        "Discovery page shows only verified electricians",
+        "Location and service category filters work correctly",
+        "Electricians are grouped and sorted by proximity to selected location",
+        "Each card shows all required fields",
+        "'Book Now' button navigates to booking flow"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ElectricianDiscovery.tsx",
+          "operation": "create",
+          "description": "Create the Electrician Discovery page displaying a search interface with location filter (dropdown of 5+ areas), service category filter, and radius selector. Display verified electricians as cards grouped by proximity. Each card shows: name, photo (using blob-storage to display profile photos), rating (stars), services offered, location, and a 'Book Now' button. Filter results to show only electricians with status 'verified'. Book Now button navigates to /booking/:electricianId. Apply theme styling with card-based layout."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /discover route pointing to ElectricianDiscovery component. Add this route to the customer navigation menu."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Implement rating and recommendation system with post-job rating modal, average rating display, and sorting by rating",
+      "acceptanceCriteria": [
+        "Rating modal appears after job completion for the customer",
+        "Average rating is computed and stored per electrician",
+        "Discovery results default to sorting by highest rating",
+        "Electricians below 2.0 average rating are flagged in the admin dashboard"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/RatingModal.tsx",
+          "operation": "create",
+          "description": "Create a rating modal component displayed after job completion. Allow the customer to rate the electrician 1–5 stars and leave a written review. On submit, save the rating to the backend. Modal should be triggered by the parent component after job status changes to 'completed'. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/pages/ElectricianDiscovery.tsx",
+          "operation": "modify",
+          "description": "Update the discovery page to default sort electricians by average rating (descending). Ensure electrician cards display the average rating prominently. Filter logic should exclude electricians with status not 'verified'."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Build service categories module displaying category cards on customer home screen",
+      "acceptanceCriteria": [
+        "Service category cards render on the customer home screen with icons and labels",
+        "Clicking a category navigates to the discovery page pre-filtered by that category"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ServiceCategories.tsx",
+          "operation": "create",
+          "description": "Create a service categories component displaying the following categories as visual icon cards: Electrical Repair, Preventive Maintenance, New Installation, Wiring & Rewiring, Panel Upgrade, Emergency Call-out, Industrial Services. Use the generated icon set from frontend/public/assets/generated/service-icons.dim_512x512.png (ensure proper slicing or separate icon assets for each category). Each card navigates to /discover with a pre-selected category filter query parameter. Apply theme styling with icon-based cards."
+        },
+        {
+          "path": "frontend/src/pages/CustomerHome.tsx",
+          "operation": "create",
+          "description": "Create the customer home page displaying the ServiceCategories component prominently. Include a welcome message and quick navigation to the discovery page. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /home route pointing to CustomerHome component. Set this as the landing page for authenticated customers after login."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Build product marketplace with product listings, category filters, cart functionality, and admin product management",
+      "acceptanceCriteria": [
+        "Marketplace page renders product cards with all required fields",
+        "Products are filterable by category",
+        "Add to Cart works and updates a cart counter in the header",
+        "Cart summary page shows items, quantities, and total price"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Marketplace.tsx",
+          "operation": "create",
+          "description": "Create the product marketplace page displaying products in categories: Switchboards, Wires & Cables, Pliers & Tools, Conduit & Casing, MCBs & Circuit Breakers, Lighting Fixtures. Each product card shows: image (using blob-storage), name, price, stock status, seller/brand name, and an Add to Cart button. Include category filter sidebar. Implement cart state management (consider React Context or state management library). Update cart counter in the header. Apply theme styling with card-based layout."
+        },
+        {
+          "path": "frontend/src/pages/Cart.tsx",
+          "operation": "create",
+          "description": "Create the cart summary page displaying cart items, quantities, and total price. Include quantity adjustment controls and a Checkout button. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Add a cart icon to the header with a badge showing the cart item count. Clicking the icon navigates to /cart."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /marketplace and /cart routes. Add /marketplace to the customer navigation menu."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Implement government contract module for contractors and admins with contract listings, application submission, and status tracking",
+      "acceptanceCriteria": [
+        "Government Contracts section is visible to Contractor and Admin roles only",
+        "Contract listings display all required fields",
+        "Contractor can apply with bid amount and team size",
+        "Application status is tracked and visible to the contractor",
+        "Admin can award or reject applications"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/GovernmentContracts.tsx",
+          "operation": "create",
+          "description": "Create the Government Contracts page displaying a list of contract opportunities. Each contract listing shows: contract title, issuing authority, location, scope of work, budget range, deadline, and an 'Apply' button (for contractors). Guard access to this page for Contractor and Admin roles using the authorization component. Verify the authorization component's usage instructions. Apply theme styling with card-based contract listings."
+        },
+        {
+          "path": "frontend/src/components/ContractApplicationModal.tsx",
+          "operation": "create",
+          "description": "Create a modal for contractors to submit contract applications. Include fields for bid amount and team size. On submit, save the application to the backend with status 'Submitted'. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/pages/MyContractApplications.tsx",
+          "operation": "create",
+          "description": "Create a page for contractors to view their submitted contract applications with status tracking (Submitted, Under Review, Awarded, Rejected). Apply theme styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /contracts and /my-applications routes. Add /contracts to the contractor and admin navigation menus."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Implement promotional banners system with horizontally scrollable carousel on customer home screen",
+      "acceptanceCriteria": [
+        "Banner carousel renders at the top of the customer home screen",
+        "Banners auto-rotate every 4 seconds",
+        "Only active banners matching the user's location (or global) are shown"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BannerCarousel.tsx",
+          "operation": "create",
+          "description": "Create a horizontally scrollable banner carousel component displaying promotional banners. Use the generated placeholder banner image frontend/public/assets/generated/banner-placeholder.dim_1200x400.png. Auto-rotate banners every 4 seconds. Filter banners to show only those matching the user's selected location or global banners. Use blob-storage to display uploaded banner images. Verify the blob-storage component's usage instructions. Apply theme styling with smooth transitions."
+        },
+        {
+          "path": "frontend/src/pages/CustomerHome.tsx",
+          "operation": "modify",
+          "description": "Wire the BannerCarousel component at the top of the customer home page above the ServiceCategories component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Build in-app notifications system with notification bell icon, unread badge, notifications panel, and mark all as read functionality",
+      "acceptanceCriteria": [
+        "Notification bell icon in header shows unread count badge",
+        "Notifications panel opens on click and lists all notifications",
+        "Notification types are visually distinguished with icons",
+        "Mark all as read clears the unread badge"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NotificationBell.tsx",
+          "operation": "create",
+          "description": "Create a notification bell icon component with an unread badge count. Clicking the bell opens a notifications panel. Apply theme styling with electric yellow accent for the badge."
+        },
+        {
+          "path": "frontend/src/components/NotificationsPanel.tsx",
+          "operation": "create",
+          "description": "Create a notifications panel component listing all notifications with timestamp, message, and type icon. Notification types: booking confirmation, verification status update, payment received, new contract posted, dispute update, system broadcast. Include a 'Mark all as read' button. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Add the NotificationBell component to the header. Ensure it is visible on all authenticated pages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Implement payment management UI displaying transaction history, commission breakdown, earnings, and payment summaries",
+      "acceptanceCriteria": [
+        "Electrician dashboard shows earnings history and pending balance",
+        "Admin dashboard shows total revenue and commission breakdown",
+        "Payment summary is shown to customer before booking confirmation"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/PaymentSummary.tsx",
+          "operation": "create",
+          "description": "Create a payment summary component displaying service fee breakdown: service amount, platform commission (default 10%), and total. Display to customer before booking confirmation. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/components/EarningsPanel.tsx",
+          "operation": "create",
+          "description": "Create an earnings panel component for electricians showing current balance, transaction history, and commission deducted per transaction. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/pages/ElectricianDashboard.tsx",
+          "operation": "modify",
+          "description": "Wire the EarningsPanel component into the Electrician dashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Build Electrician dashboard with profile status, jobs list, earnings, documents, reviews, and availability toggle",
+      "acceptanceCriteria": [
+        "Electrician dashboard is only accessible to Electrician role",
+        "Profile section shows verification badge (Pending/Verified/Rejected)",
+        "Jobs section lists bookings filtered by status",
+        "Earnings section shows balance and transaction history",
+        "Availability toggle updates electrician's online status in the backend"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ElectricianDashboard.tsx",
+          "operation": "create",
+          "description": "Create the Electrician dashboard with left sidebar and sections: Profile status (verification badge, edit profile button), My Jobs (upcoming, in-progress, completed bookings lists), Earnings (current balance, transaction history, commission deducted using the EarningsPanel component), My Documents (view uploaded Aadhar, PAN, certificates with status using blob-storage), My Reviews (list of customer ratings and comments), Availability toggle (online/offline status). Guard access to this dashboard for Electrician role using the authorization component. Verify authorization and blob-storage component usage instructions. Apply theme styling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /electrician-dashboard route pointing to ElectricianDashboard. Add route guard ensuring only Electrician role can access."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Apply consistent industrial-grade visual design system across all pages with dark charcoal background, electric yellow accent, and mobile-first responsive layout",
+      "acceptanceCriteria": [
+        "Color palette consistently uses #1A1A2E background and #F5C518 accent across all pages",
+        "Inter font applied globally",
+        "All admin and user dashboards have a left sidebar with role-appropriate navigation items",
+        "All views are responsive and usable on mobile screen widths",
+        "Lightning bolt icon is used as the brand logo mark throughout"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define global CSS variables for the theme: --color-primary-bg: #1A1A2E (dark charcoal), --color-accent: #F5C518 (electric yellow), --color-text: #FFFFFF (white). Apply Inter font family globally. Set body background to --color-primary-bg and default text color to --color-text. Ensure all typography uses the Inter font."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme with custom colors: 'primary-bg': '#1A1A2E', 'accent': '#F5C518', 'text-white': '#FFFFFF'. Add Inter to the font family configuration. Ensure all utility classes align with the design system."
+        },
+        {
+          "path": "frontend/src/components/Sidebar.tsx",
+          "operation": "create",
+          "description": "Create a reusable Sidebar component for all admin and user dashboards. Include role-specific navigation items with icon-based navigation. Use the lightning bolt icon (from frontend/public/assets/generated/sparkling-logo.dim_256x256.png) as the brand logo at the top of the sidebar. Apply theme styling with dark charcoal background and electric yellow accents. Ensure mobile responsiveness with a collapsible sidebar."
+        },
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "create",
+          "description": "Create a Header component displaying the Sparkling logo (lightning bolt icon from frontend/public/assets/generated/sparkling-logo.dim_256x256.png), navigation links, cart icon (for customers), notification bell icon, and user profile dropdown. Apply theme styling with dark background and yellow accents. Ensure mobile responsiveness."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the Header component as a persistent layout element for all authenticated pages. Ensure the Header includes role-appropriate navigation items and is responsive."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "frontend/src/App.tsx": "Main application component that manages client-side routing via a `currentPath` state, wraps the app in `CartProvider` and `NotificationProvider`, renders the `SplashScreen` on initial load, and conditionally shows the `Header` and `Footer` based on the current route before delegating to the appropriate page component.",
+  "frontend/src/pages/BookingPage.tsx": "Multi-step booking flow page that accepts an `electricianId` prop, displays electrician details, lets the customer select a service/date/time, shows a `PaymentSummary` before confirmation, and triggers a `RatingModal` after the booking is confirmed."
+}

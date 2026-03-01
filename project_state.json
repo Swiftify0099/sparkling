@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Sparkling — a cross-platform marketplace and management platform for electricians, customers, contractors, and government contracts. Built with React Native + NativeWind (mobile), React.js (web), FastAPI (backend), and MariaDB (database). Supports role-based access for Super Admin, Electrician Admin, Electrician, Customer, and Contractor roles.",
+  "architectural_notes": [
+    "Stack: React Native + NativeWind (mobile), React.js (web), FastAPI (backend), MariaDB (database)",
+    "Roles: Super Admin, Electrician Admin, Electrician, Customer, Contractor — strict RBAC enforced at API layer",
+    "Electricians must pass admin KYC/document verification before appearing in search results",
+    "Geo-radius filtering for electrician discovery; nearby electricians grouped by location clusters",
+    "Modular monolith backend initially; designed for microservice extraction at scale",
+    "Cloud deployment recommended on AWS/GCP with CI/CD pipeline (GitHub Actions or GitLab CI)"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Sparkling app logo — lightning bolt inside a circular dark badge with electric yellow color, flat design (sparkling-logo.dim_256x256.png)\n- Splash screen full-background dark textured graphic with subtle electric arc lines in yellow on deep charcoal (splash-bg.dim_1920x1080.png)\n- Promotional banner placeholder — industrial electrical theme with yellow and dark tones, abstract wiring pattern (banner-placeholder.dim_1200x400.png)\n- Service category icon set — 7 flat electric yellow icons on dark background: wrench for Repair, gear for Maintenance, lightbulb for Installation, wire coil for Wiring, panel board for Panel Upgrade, warning bolt for Emergency, factory for Industrial (service-icons.dim_512x512.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-full-screen-animated-splash-screen-as-the-app-entry-point-display-the-sparkling-brand-logo-lightning-bolt-icon-centered-on-a-deep-charcoal-dark-background-with-an-electric-yellow-accent-color-animate-the-logo-with-a-fade-in-scale-effect-followed-by-a-horizontal-electric-arc-animation-then-auto-navigate-to-the-login-page-after-2-5-seconds-include-the-tagline-power-your-world-below-the-logo",
+      "title": "Create a full-screen animated splash screen as the app entry point. Display the 'Sparkling' brand logo (lightning bolt icon) centered on a deep charcoal/dark background with an electric yellow accent color. Animate the logo with a fade-in + scale effect, followed by a horizontal electric arc animation, then auto-navigate to the login page after 2.5 seconds. Include the tagline 'Power Your World' below the logo.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-role-based-login-page-with-a-role-selector-dropdown-super-admin-electrician-admin-electrician-customer-contractor-pre-fill-default-demo-credentials-automatically-when-a-role-is-selected-default-credentials-super-admin-admin-sparkling-com-admin-123-electrician-admin-eladmin-sparkling-com-elecadmin-123-electrician-electrician-sparkling-com-elec-123-customer-customer-sparkling-com-customer-123-contractor-contractor-sparkling-com-contract-123-display-the-pre-filled-credentials-visibly-in-the-login-form-fields-include-a-login-button-that-routes-to-the-appropriate-dashboard-based-on-role",
+      "title": "Implement a role-based login page with a role selector dropdown (Super Admin, Electrician Admin, Electrician, Customer, Contractor). Pre-fill default demo credentials automatically when a role is selected. Default credentials: Super Admin — admin@sparkling.com / Admin@123; Electrician Admin — eladmin@sparkling.com / ElecAdmin@123; Electrician — electrician@sparkling.com / Elec@123; Customer — customer@sparkling.com / Customer@123; Contractor — contractor@sparkling.com / Contract@123. Display the pre-filled credentials visibly in the login form fields. Include a 'Login' button that routes to the appropriate dashboard based on role.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-user-registration-flow-for-customer-and-contractor-roles-registration-must-include-full-name-phone-number-email-password-and-a-mandatory-location-selection-field-the-location-dropdown-must-contain-at-least-5-predefined-service-areas-e-g-north-district-south-district-east-zone-west-zone-central-city-a-user-cannot-complete-registration-without-selecting-a-location-store-user-role-location-and-profile-data-in-the-backend",
+      "title": "Implement user registration flow for Customer and Contractor roles. Registration must include: full name, phone number, email, password, and a mandatory location selection field. The location dropdown must contain at least 5 predefined service areas (e.g., North District, South District, East Zone, West Zone, Central City). A user cannot complete registration without selecting a location. Store user role, location, and profile data in the backend.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-electrician-registration-with-a-multi-step-form-step-1-personal-details-name-phone-email-password-location-step-2-professional-details-years-of-experience-service-categories-offered-step-3-document-upload-aadhar-card-pan-card-trade-certificates-profile-photo-all-document-uploads-must-be-stored-securely-after-submission-the-electrician-account-is-set-to-pending-verification-status-and-is-not-visible-to-customers-until-an-admin-approves-it",
+      "title": "Implement electrician registration with a multi-step form: Step 1 — personal details (name, phone, email, password, location); Step 2 — professional details (years of experience, service categories offered); Step 3 — document upload (Aadhar card, PAN card, trade certificates, profile photo). All document uploads must be stored securely. After submission, the electrician account is set to 'Pending Verification' status and is NOT visible to customers until an admin approves it.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-super-admin-dashboard-with-the-following-sections-overview-metrics-total-users-active-electricians-pending-verifications-revenue-today-user-management-table-list-all-users-with-role-filters-search-deactivate-activate-actions-electrician-verification-queue-list-pending-electricians-with-document-viewer-approve-reject-buttons-rejection-reason-input-revenue-commission-tracker-total-platform-revenue-commission-per-transaction-dispute-resolution-panel-list-open-disputes-with-status-and-resolution-actions-promotional-banners-management-upload-set-active-inactive-assign-to-location-notification-broadcaster-send-push-in-app-notifications-by-role-or-location",
+      "title": "Build a Super Admin dashboard with the following sections: Overview metrics (total users, active electricians, pending verifications, revenue today); User management table (list all users with role filters, search, deactivate/activate actions); Electrician verification queue (list pending electricians with document viewer, Approve/Reject buttons, rejection reason input); Revenue & commission tracker (total platform revenue, commission per transaction); Dispute resolution panel (list open disputes with status and resolution actions); Promotional banners management (upload, set active/inactive, assign to location); Notification broadcaster (send push/in-app notifications by role or location).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-electrician-admin-dashboard-with-sections-managed-electricians-list-with-verification-status-location-ratings-pending-verification-actions-approve-reject-with-document-review-payment-management-view-earnings-per-electrician-commission-deducted-payout-status-performance-metrics-jobs-completed-ratings-average-dispute-count-per-electrician",
+      "title": "Build an Electrician Admin dashboard with sections: Managed electricians list (with verification status, location, ratings); Pending verification actions (approve/reject with document review); Payment management (view earnings per electrician, commission deducted, payout status); Performance metrics (jobs completed, ratings average, dispute count per electrician).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-customer-facing-electrician-discovery-page-display-a-search-interface-with-location-filter-dropdown-of-5-areas-service-category-filter-and-radius-selector-show-results-as-cards-grouped-by-proximity-each-electrician-card-must-show-name-photo-rating-stars-services-offered-location-and-a-book-now-button-unverified-electricians-must-never-appear-in-results",
+      "title": "Build the customer-facing Electrician Discovery page. Display a search interface with location filter (dropdown of 5+ areas), service category filter, and radius selector. Show results as cards grouped by proximity. Each electrician card must show: name, photo, rating (stars), services offered, location, and a 'Book Now' button. Unverified electricians must never appear in results.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-rating-and-recommendation-system-after-a-completed-job-the-customer-can-rate-the-electrician-1-5-stars-and-leave-a-written-review-the-electrician-s-average-rating-is-displayed-on-their-profile-card-the-platform-recommends-top-rated-electricians-in-the-discovery-page-results-sorted-by-rating-descending-as-default-electricians-with-ratings-below-2-stars-are-flagged-for-admin-review",
+      "title": "Implement a rating and recommendation system. After a completed job, the customer can rate the electrician 1–5 stars and leave a written review. The electrician's average rating is displayed on their profile card. The platform recommends top-rated electricians in the discovery page results (sorted by rating descending as default). Electricians with ratings below 2 stars are flagged for admin review.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-service-categories-module-define-the-following-service-categories-in-the-backend-electrical-repair-preventive-maintenance-new-installation-wiring-rewiring-panel-upgrade-emergency-call-out-industrial-services-display-these-categories-as-visual-icon-cards-on-the-customer-home-screen-selecting-a-category-filters-the-electrician-discovery-results",
+      "title": "Build a service categories module. Define the following service categories in the backend: Electrical Repair, Preventive Maintenance, New Installation, Wiring & Rewiring, Panel Upgrade, Emergency Call-out, Industrial Services. Display these categories as visual icon cards on the customer home screen. Selecting a category filters the electrician discovery results.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-product-marketplace-section-where-customers-can-browse-and-add-electrical-products-to-a-cart-product-categories-switchboards-wires-cables-pliers-tools-conduit-casing-mcbs-circuit-breakers-lighting-fixtures-each-product-listing-shows-image-name-price-stock-status-seller-brand-name-include-an-add-to-cart-button-and-a-simple-cart-summary-view-admin-can-add-edit-remove-products-from-the-super-admin-dashboard",
+      "title": "Build a product marketplace section where customers can browse and add electrical products to a cart. Product categories: Switchboards, Wires & Cables, Pliers & Tools, Conduit & Casing, MCBs & Circuit Breakers, Lighting Fixtures. Each product listing shows: image, name, price, stock status, seller/brand name. Include an Add to Cart button and a simple cart summary view. Admin can add/edit/remove products from the Super Admin dashboard.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-government-contract-module-display-a-dedicated-government-contracts-section-accessible-to-contractor-and-admin-roles-each-contract-listing-includes-contract-title-issuing-authority-location-scope-of-work-budget-range-deadline-and-an-apply-button-contractors-can-submit-an-application-with-a-bid-amount-and-team-size-admins-can-post-edit-close-and-award-contracts-track-application-status-submitted-under-review-awarded-rejected-for-each-contractor",
+      "title": "Implement a government contract module. Display a dedicated 'Government Contracts' section accessible to Contractor and Admin roles. Each contract listing includes: contract title, issuing authority, location, scope of work, budget range, deadline, and an 'Apply' button. Contractors can submit an application with a bid amount and team size. Admins can post, edit, close, and award contracts. Track application status (Submitted, Under Review, Awarded, Rejected) for each contractor.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-promotional-banners-system-on-the-customer-home-screen-display-a-horizontally-scrollable-banner-carousel-at-the-top-of-the-home-page-banners-are-uploaded-and-managed-by-super-admin-image-target-url-active-status-location-targeting-show-only-banners-targeted-at-the-user-s-selected-location-or-global-banners-auto-rotate-banners-every-4-seconds",
+      "title": "Implement a promotional banners system on the customer home screen. Display a horizontally scrollable banner carousel at the top of the home page. Banners are uploaded and managed by Super Admin (image, target URL, active status, location targeting). Show only banners targeted at the user's selected location or global banners. Auto-rotate banners every 4 seconds.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-in-app-notifications-system-display-a-notification-bell-icon-in-the-header-with-an-unread-badge-count-clicking-it-opens-a-notifications-panel-listing-all-notifications-timestamp-message-type-icon-notification-types-booking-confirmation-verification-status-update-payment-received-new-contract-posted-dispute-update-system-broadcast-mark-all-as-read-button-backend-must-store-notifications-per-user-and-return-unread-count",
+      "title": "Build an in-app notifications system. Display a notification bell icon in the header with an unread badge count. Clicking it opens a notifications panel listing all notifications (timestamp, message, type icon). Notification types: booking confirmation, verification status update, payment received, new contract posted, dispute update, system broadcast. Mark all as read button. Backend must store notifications per user and return unread count.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-payment-management-and-commission-model-each-completed-service-booking-records-a-transaction-service-amount-platform-commission-configurable-default-10-electrician-net-payout-the-customer-facing-booking-flow-includes-a-payment-summary-screen-showing-service-fee-breakdown-admin-dashboard-shows-total-revenue-commission-collected-and-pending-payouts-electrician-dashboard-shows-their-earnings-history-and-pending-balance-contractor-payments-for-bulk-hires-are-recorded-separately-with-a-bulk-commission-rate-default-8",
+      "title": "Implement a payment management and commission model. Each completed service booking records a transaction: service amount, platform commission (configurable, default 10%), electrician net payout. The customer-facing booking flow includes a payment summary screen showing service fee breakdown. Admin dashboard shows total revenue, commission collected, and pending payouts. Electrician dashboard shows their earnings history and pending balance. Contractor payments for bulk hires are recorded separately with a bulk commission rate (default 8%).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-electrician-dashboard-view-visible-when-logged-in-as-electrician-role-sections-profile-status-verification-badge-edit-profile-my-jobs-upcoming-in-progress-completed-bookings-earnings-current-balance-transaction-history-commission-deducted-my-documents-view-uploaded-aadhar-pan-certificates-with-status-my-reviews-list-of-customer-ratings-and-comments-availability-toggle-online-offline-status",
+      "title": "Build the Electrician dashboard view (visible when logged in as Electrician role). Sections: Profile status (verification badge, edit profile); My Jobs (upcoming, in-progress, completed bookings); Earnings (current balance, transaction history, commission deducted); My Documents (view uploaded Aadhar, PAN, certificates with status); My Reviews (list of customer ratings and comments); Availability toggle (online/offline status).",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-consistent-industrial-grade-visual-design-system-across-all-pages-use-a-dark-charcoal-primary-background-1a1a2e-electric-yellow-accent-f5c518-clean-white-text-and-a-sans-serif-font-inter-use-bold-icon-based-navigation-card-based-layouts-with-subtle-borders-and-a-lightning-bolt-motif-as-the-brand-symbol-all-dashboards-must-have-a-left-sidebar-navigation-mobile-first-responsive-layout-for-all-views-no-decorative-gradients-flat-high-contrast-ui",
+      "title": "Apply a consistent industrial-grade visual design system across all pages. Use a dark charcoal primary background (#1A1A2E), electric yellow accent (#F5C518), clean white text, and a sans-serif font (Inter). Use bold icon-based navigation, card-based layouts with subtle borders, and a lightning bolt motif as the brand symbol. All dashboards must have a left sidebar navigation. Mobile-first responsive layout for all views. No decorative gradients — flat, high-contrast UI.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Splash screen (beautiful, branded)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "User registration & login with mandatory location selection (min 5 areas)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Default login credentials for all role-based login pages",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Electrician registration with document verification (Aadhar, PAN, certificates)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Admin verification workflow before electrician service visibility",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Location-based electrician discovery with geo-radius filtering and grouping",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Rating & recommendation system for electricians",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "In-app chat & calling between users and electricians",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Service categories module (repair, maintenance, installation, etc.)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Product marketplace (switchboards, wires, pliers, casing, etc.)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Government contract module",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Contractor role for bulk hiring of electricians",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Promotional banners for brands",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Notifications system (push, in-app)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Payment management & commission model",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Super Admin dashboard with full platform control",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Electrician Admin dashboard for managing electricians, payments, and verification",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Analytics, revenue tracking, dispute resolution, and product management in admin panels",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Sparkling",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

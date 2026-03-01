@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Sparkling Design System - Light (unused, app is dark-first) */
+    --background: 0.13 0.02 265;
+    --foreground: 0.97 0 0;
+    --card: 0.16 0.02 265;
+    --card-foreground: 0.97 0 0;
+    --popover: 0.16 0.02 265;
+    --popover-foreground: 0.97 0 0;
+    --primary: 0.82 0.18 85;
+    --primary-foreground: 0.1 0.02 265;
+    --secondary: 0.2 0.02 265;
+    --secondary-foreground: 0.97 0 0;
+    --muted: 0.2 0.02 265;
+    --muted-foreground: 0.6 0.02 265;
+    --accent: 0.82 0.18 85;
+    --accent-foreground: 0.1 0.02 265;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.25 0.02 265;
+    --input: 0.22 0.02 265;
+    --ring: 0.82 0.18 85;
+    --chart-1: 0.82 0.18 85;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.398 0.07 227.392;
+    --chart-4: 0.828 0.189 84.429;
+    --chart-5: 0.769 0.188 70.08;
+    --sidebar: 0.11 0.02 265;
+    --sidebar-foreground: 0.97 0 0;
+    --sidebar-primary: 0.82 0.18 85;
+    --sidebar-primary-foreground: 0.1 0.02 265;
+    --sidebar-accent: 0.18 0.02 265;
+    --sidebar-accent-foreground: 0.97 0 0;
+    --sidebar-border: 0.22 0.02 265;
+    --sidebar-ring: 0.82 0.18 85;
+  }
+
+  .dark {
+    --background: 0.13 0.02 265;
+    --foreground: 0.97 0 0;
+    --card: 0.16 0.02 265;
+    --card-foreground: 0.97 0 0;
+    --popover: 0.16 0.02 265;
+    --popover-foreground: 0.97 0 0;
+    --primary: 0.82 0.18 85;
+    --primary-foreground: 0.1 0.02 265;
+    --secondary: 0.2 0.02 265;
+    --secondary-foreground: 0.97 0 0;
+    --muted: 0.2 0.02 265;
+    --muted-foreground: 0.6 0.02 265;
+    --accent: 0.82 0.18 85;
+    --accent-foreground: 0.1 0.02 265;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.25 0.02 265;
+    --input: 0.22 0.02 265;
+    --ring: 0.82 0.18 85;
+    --chart-1: 0.82 0.18 85;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.398 0.07 227.392;
+    --chart-4: 0.828 0.189 84.429;
+    --chart-5: 0.769 0.188 70.08;
+    --sidebar: 0.11 0.02 265;
+    --sidebar-foreground: 0.97 0 0;
+    --sidebar-primary: 0.82 0.18 85;
+    --sidebar-primary-foreground: 0.1 0.02 265;
+    --sidebar-accent: 0.18 0.02 265;
+    --sidebar-accent-foreground: 0.97 0 0;
+    --sidebar-border: 0.22 0.02 265;
+    --sidebar-ring: 0.82 0.18 85;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .spark-glow {
+    box-shadow: 0 0 20px oklch(0.82 0.18 85 / 0.4);
+  }
+  .spark-glow-sm {
+    box-shadow: 0 0 10px oklch(0.82 0.18 85 / 0.3);
+  }
+  .text-gradient-yellow {
+    background: linear-gradient(135deg, oklch(0.9 0.2 85), oklch(0.75 0.18 75));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Splash screen animations */
+@keyframes fadeInScale {
+  0% { opacity: 0; transform: scale(0.7); }
+  60% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes arcFlash {
+  0%, 100% { opacity: 0; transform: scaleX(0); }
+  50% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-yellow {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.82 0.18 85 / 0.4); }
+  50% { box-shadow: 0 0 0 12px oklch(0.82 0.18 85 / 0); }
+}
+
+@keyframes boltFlicker {
+  0%, 90%, 100% { opacity: 1; }
+  92% { opacity: 0.4; }
+  94% { opacity: 1; }
+  96% { opacity: 0.6; }
+  98% { opacity: 1; }
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out 0.6s both;
+}
+
+.animate-arc {
+  animation: arcFlash 0.4s ease-in-out 1.2s both;
+}
+
+.animate-bolt-flicker {
+  animation: boltFlicker 3s ease-in-out infinite;
+}
+
+.animate-pulse-yellow {
+  animation: pulse-yellow 2s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: oklch(0.16 0.02 265);
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.3 0.02 265);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.82 0.18 85 / 0.6);
+}
